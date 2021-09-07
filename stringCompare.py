@@ -3,7 +3,6 @@ import numpy as np
 import imutils as imutils
 
 
-
 def order_points(pts):
 	# initialzie a list of coordinates that will be ordered
 	# such that the first entry in the list is the top-left,
@@ -60,14 +59,14 @@ def four_point_transform(image, pts):
 
 
 
-img = cv2.imread('/Users/somang/Desktop/ex15.png', cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('/Users/somang/Desktop/ex15.png')
 ratio = img.shape[0] / 600.0
 orig = img.copy()
 img = imutils.resize(img,height = 600)
 cv2.imshow("1",img)
-gray = cv2.cvtColor(img, cv2.THRESH_OTSU)
-gray = cv2.GaussianBlur(gray,(5,5),0)
-edged = cv2.Canny(gray, 75,200)
+#gray = cv2.cvtColor(img, cv2.THRESH_OTSU)
+#gray = cv2.GaussianBlur(gray,(5,5),0)
+edged = cv2.Canny(img, 75,200)
 
 #cv2.imshow("image",img)
 #cv2.imshow("edged",edged)
@@ -84,7 +83,7 @@ for c in cnts:
         screenCnt = approx
         break
 
-cv2.drawContours(img,[screenCnt],-1,(0,255,0),2)
+#cv2.drawContours(img,[screenCnt],-1,(0,255,0),2)
 #cv2.imshow("Outline",img)
 
 
@@ -92,9 +91,22 @@ warped = four_point_transform(orig,screenCnt.reshape(4,2)*ratio)
 #T = threshold_local(warped,11,offset = 10, method = "gaussian")
 #warped = (warped>T).astype("uint8") * 255
 cv2.imshow("Scanned",imutils.resize(warped, height = 650))
-#img = imutils.resize(warped, height = 650)
+scanned = imutils.resize(warped, height = 650)
+cv2.imshow("scanned",scanned)
 
-cv2.imwrite("/Users/somang/Desktop/flat_img.png",warped)
 
+height, width = scanned.shape[:2] # 이미지의 높이와 너비 불러옴, 가로 [0], 세로[1]
+img_hsv = cv2.cvtColor(scanned, cv2.COLOR_BGR2HSV) # cvtColor 함수를 이용하여 hsv 색공간으로 변환
+lower_blue = (120-10, 30, 30) # hsv 이미지에서 바이너리 이미지로 생성 , 적당한 값 30
+upper_blue = (120+10, 255, 255)
+img_mask = cv2.inRange(img_hsv, lower_blue, upper_blue) # 범위내의 픽셀들은 흰색, 나머지 검은색
 
+# 바이너리 이미지를 마스크로 사용하여 원본이미지에서 범위값에 해당하는 영상부분을 획득
+img_result = cv2.bitwise_and(scanned, scanned, mask=img_mask)
+
+cv2.imshow('img_origin', scanned)
+cv2.imshow('img_mask', img_mask)
+cv2.imshow('img_color', img_result)
+
+cv2.waitKey(0)
 cv2.destroyAllWindows()
