@@ -60,14 +60,14 @@ def four_point_transform(image, pts):
 
 
 
-img = cv2.imread('/Users/somang/Desktop/ex15.png', cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('/Users/somang/Desktop/right.png')
 ratio = img.shape[0] / 600.0
 orig = img.copy()
 img = imutils.resize(img,height = 600)
 cv2.imshow("1",img)
-gray = cv2.cvtColor(img, cv2.THRESH_OTSU)
-gray = cv2.GaussianBlur(gray,(5,5),0)
-edged = cv2.Canny(gray, 75,200)
+#gray = cv2.cvtColor(img, cv2.THRESH_OTSU)
+#gray = cv2.GaussianBlur(gray,(5,5),0)
+edged = cv2.Canny(img, 75,200)
 
 #cv2.imshow("image",img)
 #cv2.imshow("edged",edged)
@@ -94,7 +94,7 @@ warped = four_point_transform(orig,screenCnt.reshape(4,2)*ratio)
 cv2.imshow("Scanned",imutils.resize(warped, height = 650))
 #img = imutils.resize(warped, height = 650)
 
-cv2.imwrite("/Users/somang/Desktop/flat_img.png",warped)
+cv2.imwrite("/Users/somang/Desktop/right_flat_img.png",warped)
 
 
 cv2.destroyAllWindows()
