@@ -60,7 +60,7 @@ def four_point_transform(image, pts):
 
 
 
-img = cv2.imread('/Users/somang/Desktop/right.png')
+img = cv2.imread('/Users/somang/Desktop/tiger2.png')
 ratio = img.shape[0] / 600.0
 orig = img.copy()
 img = imutils.resize(img,height = 600)
@@ -94,7 +94,7 @@ warped = four_point_transform(orig,screenCnt.reshape(4,2)*ratio)
 cv2.imshow("Scanned",imutils.resize(warped, height = 650))
 #img = imutils.resize(warped, height = 650)
 
-cv2.imwrite("/Users/somang/Desktop/right_flat_img.png",warped)
+cv2.imwrite("/Users/somang/Desktop/right_tiger2.png",warped)
 
 
 cv2.destroyAllWindows()
